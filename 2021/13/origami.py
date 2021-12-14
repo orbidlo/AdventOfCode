@@ -23,7 +23,7 @@ class Origami:
     _num_folds = 0
     _fold_width: int = 0
     _fold_height: int = 0
-    _paper: set = field(default_factory=set, init=False)
+    _paper: set[Point] = field(default_factory=set, init=False)
 
     @classmethod
     def parse_file(cls, input_file, max_folds: int) -> Origami:
