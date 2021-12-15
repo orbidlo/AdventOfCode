@@ -10,7 +10,7 @@ INPUT_TEST = 'input_test.txt'
 INPUT_REGEX = r'(?P<id>\d+) @ (?P<left>\d+),(?P<top>\d+): (?P<width>\d+)x(?P<height>\d+)'
 
 Claim = namedtuple('Claim', 'id left top right bottom')
-# inch is defined by it's left top with width and height 1
+# inch is defined by its left top with width and height 1
 Inch = namedtuple('Inch', 'left top')
 
 
@@ -71,9 +71,9 @@ def get_all_inches(input_file):
 
 
 def test_get_all_inches():
-    all_inches, good_claims = get_all_inches(os.path.join(os.path.dirname(__file__), INPUT_TEST))
-    assert all_inches == 4
-    assert good_claims == '3'
+    test_all_inches, test_good_claims = get_all_inches(os.path.join(os.path.dirname(__file__), INPUT_TEST))
+    assert test_all_inches == 4
+    assert test_good_claims == '3'
 
 
 if __name__ == "__main__":

@@ -8,9 +8,9 @@ INPUT_FILE = 'input.txt'
 INPUT_TEST = 'input_test.txt'
 
 
-def list_forever(l):
+def list_forever(lst):
     while True:
-        yield from l
+        yield from lst
 
 
 def get_frequency_list(input_file):
@@ -26,9 +26,9 @@ def get_frequency(input_file):
 
 
 def test_get_frequency():
-    count, result = get_frequency(os.path.join(os.path.dirname(__file__), INPUT_TEST))
-    assert count == 4
-    assert result == 3
+    test_count, test_result = get_frequency(os.path.join(os.path.dirname(__file__), INPUT_TEST))
+    assert test_count == 4
+    assert test_result == 3
 
 
 # part 2

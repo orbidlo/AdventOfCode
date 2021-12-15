@@ -14,7 +14,7 @@ def get_input(input_file):
             byte = f.read(1)
             if not byte:
                 break
-            yield (ord(byte))
+            yield ord(byte)
 
 
 def is_react(a: int, b: int):
@@ -42,8 +42,8 @@ def react(input_file, filter_char=None):
 
 
 def test_react():
-    result = react(os.path.join(os.path.dirname(__file__), INPUT_TEST))
-    assert result == b'dabCBAcaDA'
+    test_result = react(os.path.join(os.path.dirname(__file__), INPUT_TEST))
+    assert test_result == b'dabCBAcaDA'
 
 
 def optimize_react(input_file):
@@ -56,9 +56,9 @@ def optimize_react(input_file):
 
 
 def test_optimize_react():
-    filtered, result = optimize_react(os.path.join(os.path.dirname(__file__), INPUT_TEST))
-    assert filtered == ord('C')
-    assert result == 4
+    test_filtered, test_result = optimize_react(os.path.join(os.path.dirname(__file__), INPUT_TEST))
+    assert test_filtered == ord('C')
+    assert test_result == 4
 
 
 if __name__ == "__main__":
