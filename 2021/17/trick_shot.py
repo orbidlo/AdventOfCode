@@ -60,22 +60,15 @@ class Grid:
 
     def in_area_x(self, x: int) -> bool:
         """ Given x-coordinate is within target area. """
-        if self.target_min.x <= x <= self.target_max.x:
-            return True
-        return False
+        return self.target_min.x <= x <= self.target_max.x
 
     def in_area_y(self, y: int) -> bool:
         """ Given y-coordinate is within target area. """
-        if self.target_min.y <= y <= self.target_max.y:
-            return True
-        return False
+        return self.target_min.y <= y <= self.target_max.y
 
     def trajectory_in_area(self, trajectory: list[Point]) -> bool:
         """ Return True if given trajectory is within target area. """
-        for point in trajectory:
-            if self.in_area_x(point.x) and self.in_area_y(point.y):
-                return True
-        return False
+        return any(self.in_area_x(point.x) and self.in_area_y(point.y) for point in trajectory)
 
     def overshot(self, point: Point, velocity: Velocity) -> bool:
         """ For given point and velocity decide if this overshoots target area with no chance of reaching it. """
@@ -89,8 +82,9 @@ class Grid:
 
     def generate_trajectory(self, start_velocity: Velocity) -> list[Point]:
         """ Generate trajectory for given velocity and return it. """
-        trajectory = [START_TRAJECTORY]
-        curr_point, curr_velocity = grow_trajectory(START_TRAJECTORY, current_velocity=start_velocity)
+        trajectory = []
+        curr_point = START_TRAJECTORY
+        curr_velocity = start_velocity
         while not self.overshot(curr_point, curr_velocity):
             trajectory.append(curr_point)
             curr_point, curr_velocity = grow_trajectory(curr_point, current_velocity=curr_velocity)
@@ -98,8 +92,9 @@ class Grid:
 
     def find_trajectories(self):
         """ Find all trajectories that go through target area and store them by their starting velocity. """
+        assert self.target_min.y < 0
         for x in range(1, self.target_max.x + 1):
-            for y in range(-1 * abs(self.target_min.y - 0), abs(self.target_min.y - 0)):
+            for y in range(self.target_min.y, - self.target_min.y):
                 velocity = Velocity(x, y)
                 new_trajectory = self.generate_trajectory(velocity)
                 if self.trajectory_in_area(new_trajectory):
@@ -128,10 +123,10 @@ def find_max_height(y_coordinates: tuple[int, int]) -> int:
             where velocity.x=0 (falling straight down) we can always find velocity.x such that it targets desired area
             - that is velocity.x * (velocity.x + 1) // 2 in range(target_min_x, target_max_x + 1)
         Due to velocity.y always decreasing constantly, we will need to fall through y=0 and max distance is thus
-            velocity.y + 1 = abs(target_min_y - 0)
+            velocity.y + 1 = target_min_y
         Max height is then computed as sum of finite series: velocity.y + velocity.y-1 + ... + 1
     """
-    velocity_y = abs(min(y_coordinates) - 0) - 1
+    velocity_y = abs(min(y_coordinates)) - 1
     return sum_of_finite_series(velocity_y)
 
 
@@ -145,7 +140,7 @@ def test_find_max_height():
 def count_all_velocities(grid: Grid) -> int:
     """ Generate valid trajectories hitting target area and return their count. """
     grid.find_trajectories()
-    return len(grid.trajectories.keys())
+    return len(grid.trajectories)
 
 
 def test_count_all_velocities():
