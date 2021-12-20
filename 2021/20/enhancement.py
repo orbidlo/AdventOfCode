@@ -107,14 +107,11 @@ class Grid:
                 # check output pixel and add it to new grid, if lit
                 if self.is_output_lit(output_pixel):
                     enhanced.add(output_pixel)
-        # generate pixels beyond edge to infinity
-        new_infinity = self.infinity
-        if self.infinity and not self.enhance_algorithm[-1]:
-            # infinity is unlit if lit
-            new_infinity = 0
-        elif not self.infinity and self.enhance_algorithm[0]:
-            # infinity is lit if unlit
-            new_infinity = 1
+        # generate pixels beyond edge to infinity based on algorithm first (000000000) or last (111111111) value
+        if self.infinity:
+            new_infinity = self.enhance_algorithm[-1]
+        else:
+            new_infinity = self.enhance_algorithm[0]
         grid = Grid(enhanced, self.enhance_algorithm)
         grid.infinity = new_infinity
         return grid
