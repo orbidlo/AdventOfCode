@@ -13,7 +13,7 @@ HERE = Path(__file__).parent.resolve()
 class Outcome(Enum):
     DRAW = 3
     WIN = 6
-    LOOSE = 0
+    LOSE = 0
 
 
 class Move(Enum):
@@ -29,7 +29,7 @@ MOVE_TRANSLATE = dict.fromkeys(['A', 'X'], Move.ROCK) | \
                  dict.fromkeys(['B', 'Y'], Move.PAPER) | \
                  dict.fromkeys(['C', 'Z'], Move.SCISSORS)
 OUTCOME_TRANSLATE = {
-    'X': Outcome.LOOSE,
+    'X': Outcome.LOSE,
     'Y': Outcome.DRAW,
     'Z': Outcome.WIN
 }
@@ -39,7 +39,8 @@ def eval_score(elf_shape: str, my_shape: str) -> int:
     """ Evaluate both shapes for outcome and return score """
     my_move = MOVE_TRANSLATE[my_shape]
     elf_move = MOVE_TRANSLATE[elf_shape]
-    outcome = Outcome(OUTCOME[my_move.value - elf_move.value])
+    distance = my_move.value - elf_move.value
+    outcome = Outcome(OUTCOME[distance])
     return my_move.value + outcome.value
 
 
