@@ -30,7 +30,9 @@ def test_count_max_calories():
 # part 2
 def count_top_three_calories(input_file: Path) -> int:
     calories = get_calories_sum(input_file)
-    return sum(calories.sort(reverse=True)[0:3])
+    calories.sort(reverse=True)
+    top_three = calories[0:3]
+    return sum(top_three)
 
 
 def test_count_top_three_calories():
