@@ -1,6 +1,7 @@
 # https://adventofcode.com/2022/day/2
 
 import typing
+from enum import Enum
 from pathlib import Path
 
 INPUT_FILE = 'input.txt'
@@ -8,56 +9,61 @@ INPUT_TEST = 'input_test.txt'
 
 HERE = Path(__file__).parent.resolve()
 
-# A for Rock, B for Paper, and C for Scissors
-# score: 1 for Rock, 2 for Paper, and 3 for Scissors
-# outcome: 0: lost, 3: draw, and 6: win
 
-ELF_SCORE = {'A': 1, 'B': 2, 'C': 3}
-MY_SCORE = {'X': 1, 'Y': 2, 'Z': 3}
-OUTCOME = {'X': 0, 'Y': 3, 'Z': 6}
-
-# distance is difference between my and elf score wrapped around 1-2-3-1
-OUTCOME_DISTANCE = {0: 2, 3: 0, 6: 1}
+class Outcome(Enum):
+    DRAW = 3
+    WIN = 6
+    LOOSE = 0
 
 
-def wrap(number: int, increment: int, maximum: int) -> int:
-    """ Add increment to number but beyond maximum wrap it from 1 again. """
-    return (number + increment - 1) % maximum + 1
+class Move(Enum):
+    ROCK = 1
+    PAPER = 2
+    SCISSORS = 3
+
+
+# indexes encode distance of the moves needed for the outcome
+OUTCOME = [member.value for member in Outcome]
+
+MOVE_TRANSLATE = dict.fromkeys(['A', 'X'], Move.ROCK) | \
+                 dict.fromkeys(['B', 'Y'], Move.PAPER) | \
+                 dict.fromkeys(['C', 'Z'], Move.SCISSORS)
+OUTCOME_TRANSLATE = {
+    'X': Outcome.LOOSE,
+    'Y': Outcome.DRAW,
+    'Z': Outcome.WIN
+}
 
 
 def eval_score(elf_shape: str, my_shape: str) -> int:
     """ Evaluate both shapes for outcome and return score """
-    my_score = MY_SCORE[my_shape]
-    elf_score = ELF_SCORE[elf_shape]
-    outcome = None
-    for score, distance in OUTCOME_DISTANCE.items():
-        if my_score == wrap(elf_score, distance, 3):
-            outcome = score
-    assert outcome is not None
-    return my_score + outcome
+    my_move = MOVE_TRANSLATE[my_shape]
+    elf_move = MOVE_TRANSLATE[elf_shape]
+    outcome = Outcome(OUTCOME[my_move.value - elf_move.value])
+    return my_move.value + outcome.value
 
 
 def eval_outcome(elf_shape: str, outcome_str: str) -> int:
     """ Evaluate my shape from outcome and return score """
-    outcome = OUTCOME[outcome_str]
-    elf_score = ELF_SCORE[elf_shape]
-    assert outcome in OUTCOME_DISTANCE.keys()
-    my_score = wrap(elf_score, OUTCOME_DISTANCE[outcome], 3)
+    outcome = OUTCOME_TRANSLATE[outcome_str]
+    elf_move = MOVE_TRANSLATE[elf_shape]
+    distance = OUTCOME.index(outcome.value)
+    my_move = Move((elf_move.value + distance - 1) % 3 + 1)
+    return my_move.value + outcome.value
 
-    return my_score + outcome
 
-
-def read_and_eval(input_file: Path, myfunc: typing.Callable[[str, str], int]) -> list[int]:
+def read_and_eval(input_file: Path, myfunc: typing.Callable[[str, str], int]) -> int:
     rounds_score = []
-    for guide in input_file.read_text().splitlines():
-        rounds_score.append(myfunc(*tuple(guide.split())))
-    return rounds_score
+    for entry in input_file.read_text().splitlines():
+        params = entry.split()
+        rounds_score.append(myfunc(*params))
+    return sum(rounds_score)
 
 
 # part 1
 def get_score(input_file: Path) -> int:
     score = read_and_eval(input_file, eval_score)
-    return sum(score)
+    return score
 
 
 def test_get_score():
@@ -68,7 +74,7 @@ def test_get_score():
 # part 2
 def get_score_from_outcome(input_file: Path) -> int:
     score = read_and_eval(input_file, eval_outcome)
-    return sum(score)
+    return score
 
 
 def test_get_score_from_outcome():
