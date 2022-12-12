@@ -2,9 +2,11 @@ My solutions for Advents of Code - https://adventofcode.com
 
 Use at your own risk.
 
-
+![](https://img.shields.io/badge/stars%202018⭐-15-yellow)
+![](https://img.shields.io/badge/stars%202021⭐-50-yellow)
+![](https://img.shields.io/badge/stars%202022⭐-24-yellow)
 <!--- advent_readme_stars table --->
-## 2022 Results
+## 2022 Results 
 
 | Day | Part 1 | Part 2 |
 | :---: | :---: | :---: |

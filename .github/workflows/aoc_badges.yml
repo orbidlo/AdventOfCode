@@ -1,0 +1,28 @@
+name: Update AoC Badges
+on:
+  schedule:
+    - cron: '6 5 1-25 12 *'
+
+  workflow_dispatch:
+
+  push:
+
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: joblo2213/aoc-badges-action@v3
+        with:
+          userid: 379535
+          session: ${{ secrets.AOC_SESSION }}
+          leaderboard: 'https://adventofcode.com/2020/leaderboard/private/view/1179846.json'
+          year: 2022
+          file: 'README.md'
+          starsRegex: '(?<=https:\/\/img\.shields\.io\/badge\/stars%202022⭐-)[0-9]+(?=-yellow)'             # Regular expression that finds the content of the stars badge in your file.
+
+      - uses: stefanzweifel/git-auto-commit-action@v4     # Step that pushes these local changes back to your github repo
+        with:
+          commit_message: Update badges
+          file_pattern: README.md
