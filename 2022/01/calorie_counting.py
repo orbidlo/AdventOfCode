@@ -3,8 +3,7 @@
 
 from pathlib import Path
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
@@ -17,6 +16,7 @@ def get_calories_sum(input_file: Path) -> list[int]:
 
 
 # part 1
+@timeit
 def count_max_calories(input_file: Path) -> int:
     calories = get_calories_sum(input_file)
     return max(calories)
@@ -28,6 +28,7 @@ def test_count_max_calories():
 
 
 # part 2
+@timeit
 def count_top_three_calories(input_file: Path) -> int:
     calories = get_calories_sum(input_file)
     calories.sort(reverse=True)

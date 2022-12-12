@@ -6,8 +6,7 @@ from pathlib import Path
 
 import pytest
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE
 
 HERE = Path(__file__).parent.resolve()
 
@@ -15,12 +14,14 @@ PACKET_LENGTH = 4
 MESSAGE_LENGTH = 14
 
 
+@timeit
 def parse_input(input_file: Path) -> str:
     data = input_file.read_text().strip()
     return data
 
 
 # part 1 & 2
+@timeit
 def find_mark(stream: str, length: int) -> int:
     for counter in range(length, len(stream)):
         if len(set(stream[counter - length:counter])) == length:

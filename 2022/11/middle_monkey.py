@@ -4,39 +4,18 @@ from __future__ import annotations
 
 import math
 import operator
-import pytest
 import re
-import time
 import typing
 from dataclasses import dataclass, field
-from functools import wraps
 from pathlib import Path
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+import pytest
+
+from libs import timeit, chunks, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 ROUNDS = 20
 ROUNDS_BIG = 10000
-
-
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter_ns()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter_ns()
-        total_time = end_time - start_time
-        print(f'\tFunction {func.__name__} took {total_time / 1000} μs')
-        return result
-
-    return timeit_wrapper
-
-
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
 
 
 class Monkeys(dict[int, 'Monkey']):

@@ -5,8 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 from pathlib import Path
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
@@ -21,6 +20,7 @@ def parse_instructions(line: str) -> list:
     return [int(number) for number in row[1::2]]
 
 
+@timeit
 def parse_input(input_file: Path) -> (list[list[str]], list[list[int]]):
     data = input_file.read_text().splitlines()
     rows = []
@@ -41,6 +41,7 @@ def parse_input(input_file: Path) -> (list[list[str]], list[list[int]]):
 
 
 # part 1
+@timeit
 def rearrange_crates(crates: list, instructions: list, direction: int = 1) -> str:
     for instruction in instructions:
         number_of_crates, origin, destination = instruction
@@ -57,6 +58,7 @@ def test_rearrange_crates():
 
 
 # part 2
+@timeit
 def test_rearrange_more_crates():
     test_stacks, test_instructions = parse_input(HERE / INPUT_TEST)
     test_top_crates = rearrange_crates(crates=test_stacks, instructions=test_instructions)

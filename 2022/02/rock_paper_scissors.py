@@ -4,8 +4,7 @@ import typing
 from enum import Enum
 from pathlib import Path
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
@@ -62,6 +61,7 @@ def read_and_eval(input_file: Path, myfunc: typing.Callable[[str, str], int]) ->
 
 
 # part 1
+@timeit
 def get_score(input_file: Path) -> int:
     score = read_and_eval(input_file, eval_score)
     return score
@@ -73,6 +73,7 @@ def test_get_score():
 
 
 # part 2
+@timeit
 def get_score_from_outcome(input_file: Path) -> int:
     score = read_and_eval(input_file, eval_outcome)
     return score

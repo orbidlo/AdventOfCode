@@ -2,16 +2,13 @@
 
 from __future__ import annotations
 
-import time
 import typing
 from dataclasses import dataclass, field
-from functools import wraps
 from pathlib import Path
 
 import pytest
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, cmp, INPUT_FILE
 
 HERE = Path(__file__).parent.resolve()
 
@@ -29,24 +26,6 @@ DIRECTIONS = {
 }
 
 Direction = typing.Tuple[int, int]
-
-
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter_ns()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter_ns()
-        total_time = end_time - start_time
-        print(f'\tFunction {func.__name__} took {total_time / 1000} μs')
-        return result
-
-    return timeit_wrapper
-
-
-def cmp(a: int, b: int) -> int:
-    # -1 when a<b, 0 when a==b, 1 when a>b
-    return (a > b) - (a < b)
 
 
 @dataclass(frozen=True)

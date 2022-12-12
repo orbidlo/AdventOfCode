@@ -1,20 +1,18 @@
 # https://adventofcode.com/2022/day/3
-
+import string
 import typing as t
 from pathlib import Path
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
-LETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 N = 3  # number of lines in each group
 
 
 def get_priority(letter: str) -> int:
     assert len(letter) == 1
-    return LETTERS.index(letter) + 1
+    return string.ascii_letters.index(letter) + 1
 
 
 def split_each_line_in_half(data: list[str]) -> t.Iterable[tuple[str]]:
@@ -39,6 +37,7 @@ def find_intersection(data: t.Iterable[tuple[str]]) -> int:
 
 
 # part 1
+@timeit
 def get_priorities(input_file: Path) -> int:
     data = input_file.read_text().splitlines()
     priorities = find_intersection(split_each_line_in_half(data))
@@ -51,6 +50,7 @@ def test_get_priorities():
 
 
 # part 2
+@timeit
 def get_common_priorities(input_file: Path) -> int:
     data = input_file.read_text().splitlines()
     priorities = find_intersection(split_every_nth_line(data))

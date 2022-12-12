@@ -3,14 +3,12 @@
 from __future__ import annotations
 
 import math
-import time
 from dataclasses import dataclass, field
 from enum import Enum
-from functools import wraps, cached_property
+from functools import cached_property
 from pathlib import Path
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
@@ -19,7 +17,7 @@ DISK_SIZE = 70000000
 TARGET_SIZE = 30000000
 
 
-@dataclass
+@dataclass(frozen=True)
 class Point:
     x: int
     y: int
@@ -27,28 +25,12 @@ class Point:
     def __add__(self, direction: Dirs):
         return Point(self.x + direction.value.x, self.y + direction.value.y)
 
-    def __hash__(self):
-        return hash((self.y, self.y))
-
 
 class Dirs(Enum):
     UP = Point(0, -1)
     DOWN = Point(0, 1)
     LEFT = Point(-1, 0)
     RIGHT = Point(1, 0)
-
-
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter_ns()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter_ns()
-        total_time = end_time - start_time
-        print(f'\tFunction {func.__name__} took {total_time / 1000} μs')
-        return result
-
-    return timeit_wrapper
 
 
 @dataclass(frozen=False)

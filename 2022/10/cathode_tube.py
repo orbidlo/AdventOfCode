@@ -2,39 +2,17 @@
 
 from __future__ import annotations
 
-import time
 import typing
 from dataclasses import dataclass
-from functools import wraps
 from pathlib import Path
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, chunks, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
 CYCLES = [20, 60, 100, 140, 180, 220]
 CRT_WIDTH = 40
 CRT_HEIGHT = 6
-
-
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter_ns()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter_ns()
-        total_time = end_time - start_time
-        print(f'\tFunction {func.__name__} took {total_time / 1000} μs')
-        return result
-
-    return timeit_wrapper
-
-
-def chunks(iterable: list | str, n: int) -> typing.Iterator[list | str]:
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(iterable), n):
-        yield iterable[i:i + n]
 
 
 @dataclass

@@ -6,8 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator, Any
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
@@ -48,7 +47,7 @@ class Range:
         return self.max >= other.min and self.min <= other.max
 
 
-def parse(line: str) -> tuple[Range, Range]:
+def parse_range(line: str) -> tuple[Range, Range]:
     range_1, range_2 = line.split(',')
     range_1_min, range_1_max = range_1.split('-')
     range_2_min, range_2_max = range_2.split('-')
@@ -56,11 +55,12 @@ def parse(line: str) -> tuple[Range, Range]:
 
 
 # part 1
+@timeit
 def count_full_overlap(input_file: Path) -> int:
     data = input_file.read_text().splitlines()
     counter = 0
     for line in data:
-        range_1, range_2 = parse(line)
+        range_1, range_2 = parse_range(line)
         if (range_1 in range_2) or (range_2 in range_1):
             counter += 1
     return counter
@@ -72,11 +72,12 @@ def test_count_full_overlap():
 
 
 # part 2
+@timeit
 def count_any_overlap(input_file: Path) -> int:
     data = input_file.read_text().splitlines()
     counter = 0
     for line in data:
-        range_1, range_2 = parse(line)
+        range_1, range_2 = parse_range(line)
         if range_1.overlaps(range_2):
             counter += 1
     return counter

@@ -2,35 +2,19 @@
 
 from __future__ import annotations
 
-import time
 import typing
-
 from dataclasses import dataclass, field
-from functools import wraps, cached_property
+from functools import cached_property
 from pathlib import Path
 from textwrap import indent
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+from libs import timeit, INPUT_FILE, INPUT_TEST
 
 HERE = Path(__file__).parent.resolve()
 
 SMALL_SIZE = 100000
 DISK_SIZE = 70000000
 TARGET_SIZE = 30000000
-
-
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter_ns()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter_ns()
-        total_time = end_time - start_time
-        print(f'\tFunction {func.__name__} took {total_time / 1000} μs')
-        return result
-
-    return timeit_wrapper
 
 
 @dataclass
