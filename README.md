@@ -4,7 +4,7 @@ Use at your own risk.
 
 ![](https://img.shields.io/badge/stars%202018⭐-15-yellow)
 ![](https://img.shields.io/badge/stars%202021⭐-50-yellow)
-![](https://img.shields.io/badge/stars%202022⭐-24-yellow)
+![](https://img.shields.io/badge/stars%202022⭐-0-yellow)
 <!--- advent_readme_stars table --->
 ## 2022 Results 
 
