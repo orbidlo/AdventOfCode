@@ -96,7 +96,7 @@ def parse(input_file: Path) -> tuple[Grid, list[Point]]:
     return grid, lowest_elevations
 
 
-def a_start(graph: Grid, start_point: Point, end_point: Point | None, stop_at_end: bool = True) -> dict[Point, int]:
+def a_star(graph: Grid, start_point: Point, end_point: Point | None) -> dict[Point, int]:
     """ A* algorithm for finding all shortest paths from start within given graph using priority queue (distance). """
 
     graph.solved_points = set()
@@ -115,7 +115,7 @@ def a_start(graph: Grid, start_point: Point, end_point: Point | None, stop_at_en
         # add current point to solved set
         graph.solved_points.add(current)
         # solve all it's neighbors
-        for neighbor in graph.get_neighbors(current, inverted=not stop_at_end):
+        for neighbor in graph.get_neighbors(current, inverted=end_point is None):
             # edge weight is always 1 as we generate only acceptable neighbors
             distance = 1
             # skip this neighbor if it's already solved
@@ -130,7 +130,7 @@ def a_start(graph: Grid, start_point: Point, end_point: Point | None, stop_at_en
                 # store the new shortest distance for the neighbor
                 shortest_path[neighbor] = new_cost
                 # if we found end, stop algorithm
-                if stop_at_end and neighbor == end_point:
+                if neighbor == end_point:
                     break
                 # place the neighbor into priority queue so all it's neighbors can be solved as well
                 priority_queue.put((new_cost, neighbor))
@@ -142,7 +142,7 @@ def a_start(graph: Grid, start_point: Point, end_point: Point | None, stop_at_en
 # part 1
 @timeit
 def find_shortest_path(grid: Grid) -> int:
-    paths = a_start(graph=grid, start_point=grid.start, end_point=grid.end)
+    paths = a_star(graph=grid, start_point=grid.start, end_point=grid.end)
     return paths[grid.end]
 
 
@@ -157,7 +157,7 @@ def test_find_shortest_path():
 def find_shortest_path_from_any_start(grid: Grid, lowest_elevations: list[Point]) -> int:
     # to find all shortest paths from any start with the lowest elevation to the end:
     # start in grid.end and find all accessible paths and then check shortest paths to the lowest elevations
-    paths = a_start(graph=grid, start_point=grid.end, end_point=None, stop_at_end=False)
+    paths = a_star(graph=grid, start_point=grid.end, end_point=None)
     return min(paths[end] for end in lowest_elevations if paths[end] is not None)
 
 
