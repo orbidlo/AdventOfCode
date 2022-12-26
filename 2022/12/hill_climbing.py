@@ -96,8 +96,8 @@ def parse(input_file: Path) -> tuple[Grid, list[Point]]:
     return grid, lowest_elevations
 
 
-def a_star(graph: Grid, start_point: Point, end_point: Point | None) -> dict[Point, int]:
-    """ A* algorithm for finding all shortest paths from start within given graph using priority queue (distance). """
+def dijkstra(graph: Grid, start_point: Point, end_point: Point | None) -> dict[Point, int]:
+    """ Algorithm for finding all shortest paths from start within given graph using priority queue (distance). """
 
     graph.solved_points = set()
     shortest_path: dict[Point, int | None] = {point: None for point in graph.all_points()}
@@ -142,7 +142,7 @@ def a_star(graph: Grid, start_point: Point, end_point: Point | None) -> dict[Poi
 # part 1
 @timeit
 def find_shortest_path(grid: Grid) -> int:
-    paths = a_star(graph=grid, start_point=grid.start, end_point=grid.end)
+    paths = dijkstra(graph=grid, start_point=grid.start, end_point=grid.end)
     return paths[grid.end]
 
 
@@ -157,7 +157,7 @@ def test_find_shortest_path():
 def find_shortest_path_from_any_start(grid: Grid, lowest_elevations: list[Point]) -> int:
     # to find all shortest paths from any start with the lowest elevation to the end:
     # start in grid.end and find all accessible paths and then check shortest paths to the lowest elevations
-    paths = a_star(graph=grid, start_point=grid.end, end_point=None)
+    paths = dijkstra(graph=grid, start_point=grid.end, end_point=None)
     return min(paths[end] for end in lowest_elevations if paths[end] is not None)
 
 
