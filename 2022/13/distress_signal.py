@@ -5,15 +5,18 @@ from __future__ import annotations
 from ast import literal_eval
 from dataclasses import dataclass
 from pathlib import Path
+import typing
 
 from libs import timeit, INPUT_FILE, INPUT_TEST, chunks
 
 HERE = Path(__file__).parent.resolve()
 
+PacketType = typing.Union[list["PacketType"], int]
+
 
 @dataclass
 class Packet:
-    value: list[Packet] | list[int] | int | None
+    value: PacketType
 
     def __repr__(self):
         return str(self.value)
