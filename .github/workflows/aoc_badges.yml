@@ -18,7 +18,7 @@ jobs:
           userid: 379535
           session: ${{ secrets.AOC_SESSION }}
           leaderboard: 'https://adventofcode.com/2020/leaderboard/private/view/1179846.json'
-          year: 2022
+          year: 2023
           file: 'README.md'
           starsRegex: '(?<=https:\/\/img\.shields\.io\/badge\/stars%202022⭐-)[0-9]+(?=-yellow)'             # Regular expression that finds the content of the stars badge in your file.
 
