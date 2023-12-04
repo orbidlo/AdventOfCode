@@ -9,8 +9,8 @@ from functools import wraps
 from itertools import product
 from typing import Iterator, Any, NamedTuple
 
-INPUT_FILE = 'input.txt'
-INPUT_TEST = 'input_test.txt'
+INPUT_FILE = "input.txt"
+INPUT_TEST = "input_test.txt"
 
 
 def to_int(num: str) -> str | int:
@@ -27,14 +27,14 @@ def timeit(func):
         result = func(*args, **kwargs)
         end_time = time.perf_counter()
         total_time = end_time - start_time
-        print(f'\tFunction {func.__name__} took {total_time * 1000:.2f} ms')
+        print(f"\tFunction {func.__name__} took {total_time * 1000:.2f} ms")
         return result
 
     return timeit_wrapper
 
 
 def lru_cache(maxsize=128, typed=False):
-    """ LRU cache usable for class methods. """
+    """LRU cache usable for class methods."""
 
     def decorator(my_func):
         @functools.wraps(my_func)
@@ -62,7 +62,7 @@ def lru_cache(maxsize=128, typed=False):
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
-        yield lst[i:i + n]
+        yield lst[i : i + n]
 
 
 def cmp(a: int, b: int) -> int:
@@ -159,17 +159,18 @@ class Voxel:
 @dataclass(frozen=True)
 class Range:
     """
-        Class implementing distance from min to max (both included).
-        Has ability to detect overlapping with another and to split by intersection.
+    Class implementing distance from min to max (both included).
+    Has ability to detect overlapping with another and to split by intersection.
     """
+
     min: int
     max: int
 
     def __post_init__(self):
-        assert self.min <= self.max, 'First parameter of range must be lower or equal to the second one.'
+        assert self.min <= self.max, "First parameter of range must be lower or equal to the second one."
 
     def __len__(self):
-        """ Length of range. """
+        """Length of range."""
         return self.max - self.min + 1
 
     def __eq__(self, other: Range) -> bool:
@@ -215,7 +216,7 @@ class Range:
         return Range(new_range_min, new_range_max)
 
     def split(self, item: Any) -> list[Range]:
-        """ Split range by intersection with another range. """
+        """Split range by intersection with another range."""
         if isinstance(item, Range):
             if self == item:
                 return [self]
@@ -236,7 +237,7 @@ class Cuboid(NamedTuple):
     z: Range
 
     def __len__(self):
-        """ Volume of cuboid. """
+        """Volume of cuboid."""
         return len(self.x) * len(self.y) * len(self.z)
 
     def __eq__(self, other):
@@ -264,7 +265,7 @@ class Cuboid(NamedTuple):
         return Cuboid(*ranges)
 
     def extract(self, other: Cuboid) -> set[Cuboid]:
-        """ Split self, extract intersection with another cuboid and return rest of sub-cuboids. """
+        """Split self, extract intersection with another cuboid and return rest of sub-cuboids."""
         new_cuboids = set()
         if self == other:
             return set()
@@ -277,6 +278,5 @@ class Cuboid(NamedTuple):
             new_cuboid = Cuboid(x, y, z)
             if new_cuboid != intersection:
                 new_cuboids.add(new_cuboid)
-        print(f'Splitting into {len(new_cuboids)} new cuboids.'
-              f'\nThrowing away {intersection}.')
+        print(f"Splitting into {len(new_cuboids)} new cuboids." f"\nThrowing away {intersection}.")
         return new_cuboids
