@@ -1,7 +1,7 @@
 Pipfile.lock
+**/input.txt
 
 .idea
-
 .pytest_cache
 __pycache__
 .cache/
