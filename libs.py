@@ -196,9 +196,14 @@ class Range:
             return other.min in self and other.max in self
         raise NotImplementedError
 
-    def __add__(self, other: Range) -> Range:
-        assert self.overlaps(other) or self.adjacent(other), "Cannot merge ranges that are not overlapping or adjacent."
-        return Range(min(self.min, other.min), max(self.max, other.max))
+    def __add__(self, other: Any) -> Range:
+        if isinstance(other, int):
+            return Range(self.min + other, self.max + other)
+        if isinstance(other, Range):
+            assert self.overlaps(other) or self.adjacent(
+                other
+            ), "Cannot merge ranges that are not overlapping or adjacent."
+            return Range(min(self.min, other.min), max(self.max, other.max))
 
     def overlaps(self, other: Range) -> bool:
         return self.max >= other.min and self.min <= other.max
