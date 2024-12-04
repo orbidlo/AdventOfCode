@@ -59,16 +59,19 @@ def test_count_xmas():
 @timeit
 def count_x_mas(grid: Grid) -> int:
     """ Counts the number of times an X shaped MAS can be found in the grid. """
-    # find MAS word, store the coordinate of middle letter and direction
+    # find diagonal MAS word
+    total_x_mas = 0
     for middle in grid.letter_coordinates["A"]:
+        count_diagonal_word = 0
         for direction in X_SHAPE_DIRS:
             if (
                 middle - direction in grid.letter_coordinates["M"]
                 and middle + direction in grid.letter_coordinates["S"]
             ):
-                grid.words[middle].add(direction)
-    # count only those MAS words that share the same middle and form X shape
-    return sum(1 for word in grid.words.values() if len(word) == 2)
+                count_diagonal_word += 1
+        # if we have exactly two diagonals for the same middle letter, it's an X-MAS
+        total_x_mas += count_diagonal_word == 2
+    return total_x_mas
 
 
 def test_count_x_mas():
@@ -80,7 +83,7 @@ def test_count_x_mas():
 if __name__ == "__main__":
     final_grid = parse_file(HERE / INPUT_FILE)
 
-    final_counter = count_word(final_grid)
+    final_counter = count_word(final_grid, XMAS)
     print(f"Count of XMAS is: {final_counter}")
 
     final_counter = count_x_mas(final_grid)
