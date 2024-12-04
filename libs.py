@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from enum import Enum
 from functools import wraps
 from itertools import product
-from typing import Iterator, Any, NamedTuple
+from typing import Iterator, Any, NamedTuple, Callable
 
 INPUT_FILE = "input.txt"
 INPUT_TEST = "input_test.txt"
@@ -20,17 +20,26 @@ def to_int(num: str) -> str | int:
         return num
 
 
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter()
-        total_time = end_time - start_time
-        print(f"\tFunction {func.__name__} took {total_time * 1000:.2f} ms")
-        return result
-
-    return timeit_wrapper
+def timeit(count: int | Callable = 1):
+    if callable(count):
+        actual_count = 1
+    else:
+        actual_count = count
+    if actual_count < 1:
+        raise ValueError("Count must be at least 1!")
+    def decorator(func):
+        @wraps(func)
+        def timeit_wrapper(*args, **kwargs):
+            start_time = time.perf_counter()
+            for i in range(actual_count):
+                result = func(*args, **kwargs)
+            end_time = time.perf_counter()
+            total_time = end_time - start_time
+            time_per_call = total_time / actual_count
+            print(f"\tFunction {func.__name__} took {time_per_call * 1000:.2f} ms")
+            return result
+        return timeit_wrapper
+    return decorator(count) if callable(count) else decorator
 
 
 def lru_cache(maxsize=128, typed=False):
